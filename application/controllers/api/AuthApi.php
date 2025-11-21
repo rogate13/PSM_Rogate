@@ -61,6 +61,7 @@ class AuthApi extends CI_Controller
 
         // Generate token (simple version)
         $token = bin2hex(random_bytes(32));
+        $this->users->save_token($user['id'], $token);
 
         // Log SUCCESS
         $this->loginLog->createLog([

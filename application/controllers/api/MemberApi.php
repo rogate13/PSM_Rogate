@@ -6,14 +6,12 @@ require_once __DIR__ . '/services/BalanceService.php';
 /**
  * Member API Controller
  *
- * PHPDoc untuk mendukung Intelephense & IntelliSense
- *
- * @property CI_Input $input
- * @property CI_Output $output
- * @property CI_Loader $load
- *
- * @property Member_model $members
+ * @property CI_Input        $input
+ * @property CI_Output       $output
+ * @property CI_Loader       $load
+ * @property Member_model    $members
  * @property Member_log_model $memberLog
+ * @property RoleLib         $role
  */
 class MemberApi extends CI_Controller
 {
@@ -21,13 +19,14 @@ class MemberApi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->load->model('Member_model', 'members');
         $this->load->model('Member_log_model', 'memberLog');
+
+        // Load role middleware
+        $this->load->library('RoleLib', null, 'role');
     }
 
-    /**
-     * Helper untuk response JSON
-     */
     private function response($data, int $status = 200)
     {
         return $this->output
@@ -37,26 +36,30 @@ class MemberApi extends CI_Controller
     }
 
     /* ==========================================================
-        GET /api/members → LIST ALL
+        GET /api/members
     =========================================================== */
     public function index()
     {
+        $this->role->require(['ADMIN', 'STAFF']);
+
         $list = $this->members->getAll();
         return $this->response($list);
     }
 
     /* ==========================================================
-        POST /api/members → CREATE MEMBER
+        POST /api/members
     =========================================================== */
     public function create()
     {
+        $this->role->require('ADMIN');
+
         $payload = json_decode($this->input->raw_input_stream, true);
 
         if (!$payload || empty($payload['full_name'])) {
             return $this->response(['message' => 'full_name is required'], 422);
         }
 
-        // Generate member_code
+        // Generate member code
         $code = 'MBR' . time();
 
         $data = [
@@ -71,7 +74,7 @@ class MemberApi extends CI_Controller
         $id = $this->members->create($data);
         $newRecord = $this->members->find($id);
 
-        // Log CREATE
+        // Log
         $this->memberLog->createLog([
             'member_id' => $id,
             'action'    => 'CREATE',
@@ -86,10 +89,12 @@ class MemberApi extends CI_Controller
     }
 
     /* ==========================================================
-        GET /api/members/{id} → DETAIL MEMBER
+        GET /api/members/{id}
     =========================================================== */
     public function show($id)
     {
+        $this->role->require(['ADMIN', 'STAFF']);
+
         $data = $this->members->find($id);
 
         if (!$data) {
@@ -100,10 +105,12 @@ class MemberApi extends CI_Controller
     }
 
     /* ==========================================================
-        PUT /api/members/{id} → UPDATE MEMBER
+        PUT /api/members/{id}
     =========================================================== */
     public function update($id)
     {
+        $this->role->require('ADMIN');
+
         $payload = json_decode($this->input->raw_input_stream, true);
         $existing = $this->members->find($id);
 
@@ -111,7 +118,6 @@ class MemberApi extends CI_Controller
             return $this->response(['message' => 'Member not found'], 404);
         }
 
-        // Validasi field yg boleh diupdate
         $updateData = [];
 
         if (isset($payload['full_name'])) $updateData['full_name'] = $payload['full_name'];
@@ -126,7 +132,6 @@ class MemberApi extends CI_Controller
         $this->members->updateData($id, $updateData);
         $updated = $this->members->find($id);
 
-        // Log UPDATE
         $this->memberLog->createLog([
             'member_id' => $id,
             'action'    => 'UPDATE',
@@ -141,20 +146,20 @@ class MemberApi extends CI_Controller
     }
 
     /* ==========================================================
-        DELETE /api/members/{id} → DELETE MEMBER
+        DELETE /api/members/{id}
     =========================================================== */
     public function delete($id)
     {
+        $this->role->require('ADMIN');
+
         $existing = $this->members->find($id);
 
         if (!$existing) {
             return $this->response(['message' => 'Member not found'], 404);
         }
 
-        // Hapus member
         $this->members->deleteData($id);
 
-        // Log DELETE
         $this->memberLog->createLog([
             'member_id' => $id,
             'action'    => 'DELETE',

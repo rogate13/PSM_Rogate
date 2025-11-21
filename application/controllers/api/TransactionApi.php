@@ -6,13 +6,13 @@ require_once __DIR__ . '/services/BalanceService.php';
 /**
  * Transaction API Controller
  *
- * @property CI_Input $input
- * @property CI_Output $output
- * @property CI_Loader $load
- * 
- * @property Transaction_model $transactions
- * @property Member_model $members
+ * @property CI_Input              $input
+ * @property CI_Output             $output
+ * @property CI_Loader             $load
+ * @property Transaction_model     $transactions
+ * @property Member_model          $members
  * @property Transaction_log_model $transactionLog
+ * @property RoleLib               $role
  */
 class TransactionApi extends CI_Controller
 {
@@ -23,12 +23,12 @@ class TransactionApi extends CI_Controller
     {
         parent::__construct();
 
-        // Load models
         $this->load->model('Transaction_model', 'transactions');
         $this->load->model('Member_model', 'members');
         $this->load->model('Transaction_log_model', 'transactionLog');
 
-        // Load service untuk hitung saldo + log transaksi
+        $this->load->library('RoleLib', null, 'role');
+
         $this->balanceService = new BalanceService();
     }
 
@@ -45,6 +45,8 @@ class TransactionApi extends CI_Controller
     =========================================================== */
     public function topup($member_id)
     {
+        $this->role->require(['ADMIN', 'STAFF']);
+
         $payload = json_decode($this->input->raw_input_stream, true);
 
         if (empty($payload['amount']) || $payload['amount'] <= 0) {
@@ -55,8 +57,8 @@ class TransactionApi extends CI_Controller
             $newBalance = $this->balanceService->topup($member_id, $payload['amount']);
 
             return $this->response([
-                'message'      => 'Topup success',
-                'new_balance'  => $newBalance
+                'message' => 'Topup success',
+                'new_balance' => $newBalance
             ]);
         } catch (Exception $e) {
             return $this->response(['message' => $e->getMessage()], 400);
@@ -68,6 +70,8 @@ class TransactionApi extends CI_Controller
     =========================================================== */
     public function deduct($member_id)
     {
+        $this->role->require(['ADMIN', 'STAFF']);
+
         $payload = json_decode($this->input->raw_input_stream, true);
 
         if (empty($payload['amount']) || $payload['amount'] <= 0) {
@@ -78,8 +82,8 @@ class TransactionApi extends CI_Controller
             $newBalance = $this->balanceService->deduct($member_id, $payload['amount']);
 
             return $this->response([
-                'message'      => 'Deduct success',
-                'new_balance'  => $newBalance
+                'message' => 'Deduct success',
+                'new_balance' => $newBalance
             ]);
         } catch (Exception $e) {
             return $this->response(['message' => $e->getMessage()], 400);
@@ -91,6 +95,8 @@ class TransactionApi extends CI_Controller
     =========================================================== */
     public function history($member_id)
     {
+        $this->role->require(['ADMIN', 'STAFF']);
+
         $member = $this->members->find($member_id);
 
         if (!$member) {
