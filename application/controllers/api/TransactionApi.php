@@ -16,7 +16,6 @@ require_once __DIR__ . '/services/BalanceService.php';
  */
 class TransactionApi extends CI_Controller
 {
-
     private $balanceService;
 
     public function __construct()
@@ -40,9 +39,9 @@ class TransactionApi extends CI_Controller
             ->set_output(json_encode($data));
     }
 
-    /* ==========================================================
+    /* -----------------------------------------------
         POST /api/members/{id}/topup
-    =========================================================== */
+    ------------------------------------------------*/
     public function topup($member_id)
     {
         $this->role->require(['ADMIN', 'STAFF']);
@@ -53,21 +52,20 @@ class TransactionApi extends CI_Controller
             return $this->response(['message' => 'Invalid amount'], 422);
         }
 
-        try {
-            $newBalance = $this->balanceService->topup($member_id, $payload['amount']);
+        $description = $payload['description'] ?? 'Topup saldo';
 
-            return $this->response([
-                'message' => 'Topup success',
-                'new_balance' => $newBalance
-            ]);
+        try {
+            $result = $this->balanceService->topup($member_id, $payload['amount'], $description);
+
+            return $this->response($result);
         } catch (Exception $e) {
             return $this->response(['message' => $e->getMessage()], 400);
         }
     }
 
-    /* ==========================================================
+    /* -----------------------------------------------
         POST /api/members/{id}/deduct
-    =========================================================== */
+    ------------------------------------------------*/
     public function deduct($member_id)
     {
         $this->role->require(['ADMIN', 'STAFF']);
@@ -78,27 +76,25 @@ class TransactionApi extends CI_Controller
             return $this->response(['message' => 'Invalid amount'], 422);
         }
 
-        try {
-            $newBalance = $this->balanceService->deduct($member_id, $payload['amount']);
+        $description = $payload['description'] ?? 'Pengurangan saldo';
 
-            return $this->response([
-                'message' => 'Deduct success',
-                'new_balance' => $newBalance
-            ]);
+        try {
+            $result = $this->balanceService->deduct($member_id, $payload['amount'], $description);
+
+            return $this->response($result);
         } catch (Exception $e) {
             return $this->response(['message' => $e->getMessage()], 400);
         }
     }
 
-    /* ==========================================================
+    /* -----------------------------------------------
         GET /api/members/{id}/transactions
-    =========================================================== */
+    ------------------------------------------------*/
     public function history($member_id)
     {
         $this->role->require(['ADMIN', 'STAFF']);
 
         $member = $this->members->find($member_id);
-
         if (!$member) {
             return $this->response(['message' => 'Member not found'], 404);
         }
