@@ -1,0 +1,19 @@
+{
+    "name": "korpora/payments",
+    "description": "aplikasi portal pembayaran korpora consulting",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.7",
+        "phpoffice/phpspreadsheet": "dev-master",
+        "dompdf/dompdf": "dev-master"
+    },
+    "suggest": {
+        "paragonie/random_compat": "Provides better randomness in PHP 5.x"
+    },
+    "require-dev": {
+        "mikey179/vfsstream": "1.1.*",
+        "phpunit/phpunit": "4.* || 5.*"
+    }
+}
