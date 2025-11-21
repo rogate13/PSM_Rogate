@@ -34,4 +34,9 @@ class Login_log_model extends CI_Model
             ->get($this->table)
             ->result_array();
     }
+
+    public function createLog($data)
+    {
+        return $this->db->insert('login_log', $data);
+    }
 }

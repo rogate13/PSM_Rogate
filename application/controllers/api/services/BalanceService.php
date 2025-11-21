@@ -1,81 +1,107 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * BalanceService
+ *
+ * @property CI_Loader $load
+ * @property Member_model $members
+ * @property Transaction_model $transactions
+ * @property Transaction_type_model $trx_types
+ * @property Transaction_log_model $transactionLog
+ */
 class BalanceService
 {
 
+    /**
+     * @var CI_Controller|CI_Model|object
+     * @property Member_model $members
+     * @property Transaction_model $transactions
+     * @property Transaction_type_model $trx_types
+     * @property Transaction_log_model $transactionLog
+     */
     private $CI;
 
     public function __construct()
     {
         $this->CI = &get_instance();
-        $this->CI->load->model('Member_model', 'members');
-        $this->CI->load->model('Transaction_model', 'transactions');
+
+        $this->CI->load->model('Member_model',         'members');
+        $this->CI->load->model('Transaction_model',    'transactions');
         $this->CI->load->model('Transaction_type_model', 'trx_types');
-        $this->CI->load->driver('cache', ['adapter' => 'redis', 'backup' => 'file']);
+        $this->CI->load->model('Transaction_log_model', 'transactionLog');
     }
 
-    public function topup($memberId, $amount, $desc = null, $ref = null)
+    /* --------------------------
+        TOPUP SALDO
+    --------------------------- */
+    public function topup($member_id, $amount)
     {
-        $member = $this->CI->members->find($memberId);
+        $member = $this->CI->members->find($member_id);
         if (!$member) throw new Exception("Member not found");
 
         $before = (int)$member['current_balance'];
         $after  = $before + $amount;
 
-        // update saldo
-        $this->CI->members->updateBalance($memberId, $after);
+        // Update saldo
+        $this->CI->members->updateBalance($member_id, $after);
 
-        // simpan transaksi
+        // Insert transaksi
         $type = $this->CI->trx_types->findByCode('TOPUP');
-
-        $this->CI->transactions->create([
-            'member_id'          => $memberId,
+        $trx_id = $this->CI->transactions->create([
+            'member_id'           => $member_id,
             'transaction_type_id' => $type['id'],
-            'reference_no'       => $ref,
-            'amount'             => $amount,
-            'balance_before'     => $before,
-            'balance_after'      => $after,
-            'description'        => $desc,
-            'channel'            => 'API'
+            'amount'              => $amount,
+            'balance_before'      => $before,
+            'balance_after'       => $after,
+            'channel'             => 'API',
         ]);
 
-        // update redis
-        $this->CI->cache->save("member_balance_$memberId", $after, 3600);
+        // Log transaksi tambahan
+        $this->CI->transactionLog->createLog([
+            'transaction_id' => $trx_id,
+            'member_id'      => $member_id,
+            'before_balance' => $before,
+            'after_balance'  => $after
+        ]);
 
         return $after;
     }
 
-    public function deduct($memberId, $amount, $desc = null, $ref = null)
+    /* --------------------------
+        DEDUCT SALDO
+    --------------------------- */
+    public function deduct($member_id, $amount)
     {
-        $member = $this->CI->members->find($memberId);
+        $member = $this->CI->members->find($member_id);
         if (!$member) throw new Exception("Member not found");
 
         $before = (int)$member['current_balance'];
-
-        if ($before < $amount)
-            throw new Exception("Insufficient balance");
+        if ($before < $amount) throw new Exception("Insufficient balance");
 
         $after = $before - $amount;
 
-        // update saldo
-        $this->CI->members->updateBalance($memberId, $after);
+        // Update saldo
+        $this->CI->members->updateBalance($member_id, $after);
 
-        // simpan transaksi
+        // Insert transaksi
         $type = $this->CI->trx_types->findByCode('PURCHASE');
-
-        $this->CI->transactions->create([
-            'member_id'          => $memberId,
+        $trx_id = $this->CI->transactions->create([
+            'member_id'           => $member_id,
             'transaction_type_id' => $type['id'],
-            'reference_no'       => $ref,
-            'amount'             => $amount,
-            'balance_before'     => $before,
-            'balance_after'      => $after,
-            'description'        => $desc,
-            'channel'            => 'API'
+            'amount'              => $amount,
+            'balance_before'      => $before,
+            'balance_after'       => $after,
+            'channel'             => 'API',
         ]);
 
-        $this->CI->cache->save("member_balance_$memberId", $after, 3600);
+        // Log transaksi tambahan
+        $this->CI->transactionLog->createLog([
+            'transaction_id' => $trx_id,
+            'member_id'      => $member_id,
+            'before_balance' => $before,
+            'after_balance'  => $after
+        ]);
 
         return $after;
     }

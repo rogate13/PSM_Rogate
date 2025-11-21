@@ -8,7 +8,7 @@ class User_model extends CI_Model
 
     public function findByUsername($username)
     {
-        return $this->db->where('username', $username)->get($this->table)->row_array();
+        return $this->db->where('username', $username)->get('users')->row_array();
     }
 
     public function find($id)
