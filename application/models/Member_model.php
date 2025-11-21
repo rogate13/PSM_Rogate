@@ -3,56 +3,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Member_model extends CI_Model
 {
+
     private $table = 'members';
-    private $primaryKey = 'id';
 
-    public function __construct()
+    public function getAll()
     {
-        parent::__construct();
-    }
-
-    public function create($data)
-    {
-        $data['created_at'] = date('Y-m-d H:i:s');
-        $data['updated_at'] = $data['created_at'];
-
-        $this->db->insert($this->table, $data);
-        return $this->db->insert_id();
+        return $this->db->order_by('id', 'DESC')->get($this->table)->result_array();
     }
 
     public function find($id)
     {
-        return $this->db
-            ->where($this->primaryKey, $id)
-            ->get($this->table)
-            ->row_array();
+        return $this->db->where('id', $id)->get($this->table)->row_array();
     }
 
-    public function findByCode($memberCode)
+    public function findByCode($code)
     {
-        return $this->db
-            ->where('member_code', $memberCode)
-            ->get($this->table)
-            ->row_array();
+        return $this->db->where('member_code', $code)->get($this->table)->row_array();
     }
 
-    public function updateBalance($memberId, $newBalance)
+    public function create($data)
     {
-        return $this->db
-            ->where($this->primaryKey, $memberId)
-            ->update($this->table, [
-                'current_balance' => $newBalance,
-                'updated_at'      => date('Y-m-d H:i:s'),
-            ]);
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id(); // BIGINT supported
     }
 
-    public function updateStatus($memberId, $status)
+    public function updateData($id, $data)
     {
-        return $this->db
-            ->where($this->primaryKey, $memberId)
-            ->update($this->table, [
-                'status'     => $status,
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
+        return $this->db->where('id', $id)->update($this->table, $data);
+    }
+
+    public function deleteData($id)
+    {
+        return $this->db->where('id', $id)->delete($this->table);
+    }
+
+    public function updateBalance($member_id, $amount)
+    {
+        return $this->db->set('current_balance', $amount)
+            ->where('id', $member_id)
+            ->update($this->table);
     }
 }
