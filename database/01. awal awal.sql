@@ -30,6 +30,8 @@ CREATE TABLE `users` (
 );
 
 ALTER TABLE users ADD COLUMN api_token VARCHAR(255) NULL;
+ALTER TABLE users ADD member_id BIGINT UNSIGNED NULL AFTER role;
+
 
 
 CREATE TABLE `transactions` (

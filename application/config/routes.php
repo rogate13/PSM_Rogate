@@ -18,5 +18,9 @@ $route['api/members/(:num)/topup']['post']        = 'api/TransactionApi/topup/$1
 $route['api/members/(:num)/deduct']['post']       = 'api/TransactionApi/deduct/$1';
 $route['api/members/(:num)/transactions']['get']  = 'api/TransactionApi/history/$1';
 
+// ADMIN – ALL TRANSACTIONS
+$route['api/transactions'] = 'api/TransactionApi/all';
+$route['api/my/transactions'] = 'api/TransactionApi/myTransactions';
+
 // LOGIN
 $route['api/auth/login']['post'] = 'api/AuthApi/login';
