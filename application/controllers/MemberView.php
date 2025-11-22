@@ -36,4 +36,80 @@ class MemberView extends CI_Controller
         $this->load->view('member/transactions', $data);
         $this->load->view('member/layouts/footer');
     }
+
+    public function topup()
+    {
+        $this->role->require(['MEMBER']);
+
+        $this->load->view('member/layouts/header');
+        $this->load->view('member/topup_form');
+        $this->load->view('member/layouts/footer');
+    }
+
+    public function topup_submit()
+    {
+        $this->role->require(['MEMBER']);
+
+        $member_id = $this->role->user()['member_id'];
+        $amount = $this->input->post('amount');
+
+        if ($amount <= 0) {
+            $data['error'] = "Nominal tidak valid.";
+            $this->load->view('member/layouts/header');
+            $this->load->view('member/topup_form', $data);
+            $this->load->view('member/layouts/footer');
+            return;
+        }
+
+        $this->load->library('BalanceService');
+
+        try {
+            $this->balanceservice->topup($member_id, $amount);
+            redirect('member/profile');
+        } catch (Exception $e) {
+            $data['error'] = $e->getMessage();
+            $this->load->view('member/layouts/header');
+            $this->load->view('member/topup_form', $data);
+            $this->load->view('member/layouts/footer');
+        }
+    }
+
+
+    public function donate()
+    {
+        $this->role->require(['MEMBER']);
+
+        $this->load->view('member/layouts/header');
+        $this->load->view('member/donate_form');
+        $this->load->view('member/layouts/footer');
+    }
+
+    public function donate_submit()
+    {
+        $this->role->require(['MEMBER']);
+
+        $member_id = $this->role->user()['member_id'];
+        $amount = $this->input->post('amount');
+
+        if ($amount <= 0) {
+            $data['error'] = "Nominal tidak valid.";
+            $this->load->view('member/layouts/header');
+            $this->load->view('member/donate_form', $data);
+            $this->load->view('member/layouts/footer');
+            return;
+        }
+
+        $this->load->library('BalanceService');
+
+        try {
+            $this->balanceservice->deduct($member_id, $amount);
+            redirect('member/profile');
+        } catch (Exception $e) {
+            $data['error'] = $e->getMessage();
+            $this->load->view('member/layouts/header');
+            $this->load->view('member/donate_form', $data);
+            $this->load->view('member/layouts/footer');
+        }
+    }
+
 }

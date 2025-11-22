@@ -33,6 +33,10 @@ $route['admin/transactions'] = 'AdminView/transactions';
 // MEMBER VIEW
 $route['member/profile'] = 'MemberView/profile';
 $route['member/transactions'] = 'MemberView/transactions';
+$route['member/topup'] = 'MemberView/topup';
+$route['member/topup/submit'] = 'MemberView/topup_submit';
+$route['member/donate'] = 'MemberView/donate';
+$route['member/donate/submit'] = 'MemberView/donate_submit';
 
 // LOGIN
 $route['login'] = 'Login/index';
