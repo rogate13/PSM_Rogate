@@ -24,3 +24,11 @@ $route['api/my/transactions'] = 'api/TransactionApi/myTransactions';
 
 // LOGIN
 $route['api/auth/login']['post'] = 'api/AuthApi/login';
+
+// ADMIN VIEW
+$route['admin/members'] = 'AdminView/members';
+$route['admin/members/(:num)'] = 'AdminView/member_detail/$1';
+
+// MEMBER VIEW
+$route['member/profile'] = 'MemberView/profile';
+$route['member/transactions'] = 'MemberView/transactions';
