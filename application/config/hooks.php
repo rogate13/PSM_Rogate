@@ -17,3 +17,10 @@ $hook['post_controller_constructor'][] = [
     'filename' => 'AuthHook.php',
     'filepath' => 'hooks'
 ];
+
+$hook['post_controller_constructor'][] = [
+    'class'    => 'RedirectLogin',
+    'function' => 'check',
+    'filename' => 'RedirectLogin.php',
+    'filepath' => 'hooks'
+];

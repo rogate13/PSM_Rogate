@@ -29,4 +29,15 @@ class AdminView extends CI_Controller
         $this->load->view('admin/members/detail', $data);
         $this->load->view('admin/layouts/footer');
     }
+
+    public function transactions()
+    {
+        $this->load->model('Transaction_model', 'transactions');
+
+        $data['list'] = $this->transactions->getAll();
+
+        $this->load->view('admin/layouts/header');
+        $this->load->view('admin/transactions/index', $data);
+        $this->load->view('admin/layouts/footer');
+    }
 }

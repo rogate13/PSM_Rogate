@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$route['default_controller'] = 'Beranda';
+$route['default_controller'] = 'Login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -28,7 +28,13 @@ $route['api/auth/login']['post'] = 'api/AuthApi/login';
 // ADMIN VIEW
 $route['admin/members'] = 'AdminView/members';
 $route['admin/members/(:num)'] = 'AdminView/member_detail/$1';
+$route['admin/transactions'] = 'AdminView/transactions';
 
 // MEMBER VIEW
 $route['member/profile'] = 'MemberView/profile';
 $route['member/transactions'] = 'MemberView/transactions';
+
+// LOGIN
+$route['login'] = 'Login/index';
+$route['login/authenticate'] = 'Login/authenticate';
+$route['logout'] = 'Login/logout';
