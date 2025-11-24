@@ -3,7 +3,7 @@
     <div class="login-card">
         <div class="brand-area">
             <img src="<?= base_url('img/wallet.png') ?>" class="brand-icon" alt="Wallet Icon">
-            <h2 class="brand-title">PSM Wallet</h2>
+            <h2 class="brand-title">PSM Rogate</h2>
             <p class="brand-subtitle">Secure Member Balance System</p>
         </div>
 

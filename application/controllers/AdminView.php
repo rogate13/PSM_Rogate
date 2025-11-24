@@ -26,7 +26,7 @@ class AdminView extends CI_Controller
         if (!$data['member']) show_404();
 
         $this->load->view('admin/layouts/header');
-        $this->load->view('admin/members/detail', $data);
+        $this->load->view('admin/detail', $data);
         $this->load->view('admin/layouts/footer');
     }
 

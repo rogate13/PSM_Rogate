@@ -23,9 +23,15 @@ class Transaction_model extends CI_Model
     public function getAll()
     {
         return $this->db
-            ->select('transactions.*, transaction_types.code AS type_code, users.username AS created_by_name')
+            ->select('
+            transactions.*,
+            members.full_name AS member_name,
+            transaction_types.name AS type_name,
+            users.username AS created_by_name
+        ')
             ->from('transactions')
-            ->join('transaction_types', 'transaction_types.id = transactions.transaction_type_id')
+            ->join('members', 'members.id = transactions.member_id', 'left')
+            ->join('transaction_types', 'transaction_types.id = transactions.transaction_type_id', 'left')
             ->join('users', 'users.id = transactions.created_by', 'left')
             ->order_by('transactions.id', 'DESC')
             ->get()
