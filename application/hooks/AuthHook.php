@@ -1,54 +1,44 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * Authentication Middleware for API
- *
- * Hook akan memproteksi seluruh endpoint di bawah /api/*
- * kecuali yang didefinisikan sebagai public routes.
- */
 class AuthHook
 {
-
     public function run()
     {
-        // Ambil instance CI
-        $CI = &get_instance();
+        $CI =& get_instance();
+        $CI->load->library('session');      // ⬅️ WAJIB supaya $CI->session ada
 
-        // Pastikan URI dikenali oleh IDE
-        /** @var CI_URI $CI_uri */
-        $CI_uri = $CI->uri;
+        $uri = uri_string(); // "", "login", "api/members", "admin/dashboard"
 
-        // Ambil string URI yang sedang diakses
-        /** @var string $uri */
-        $uri = $CI_uri->uri_string();
-
-        // Endpoint yang tidak butuh token
+        // ROUTE YANG TIDAK BOLEH DIHADANG
         $public_routes = [
-            'api/auth/login',
+            '',                     // default_controller
+            'login',
+            'login/authenticate',
+            'logout',
+            'register',
+            'assets',
         ];
 
-        // Jika endpoint sedang diakses adalah termasuk yg public → skip
-        if (in_array($uri, $public_routes, true)) {
+        foreach ($public_routes as $pub) {
+            if ($uri === $pub || strpos($uri, $pub . '/') === 0) {
+                return;
+            }
+        }
+
+        // Proteksi hanya untuk API (JWT)
+        if (strpos($uri, 'api/') === 0) {
+            $CI->load->library('AuthLib', null, 'authlib');
+            $CI->authlib->check();
             return;
         }
 
-        // Proteksi semua endpoint yang dimulai dengan "/api/"
-        if (strpos($uri, 'api/') === 0) {
-
-            // Load library AuthLib
-            $CI->load->library('AuthLib');
-
-            /**
-             * SIMPAN INSTANCE KE VARIABEL
-             * Ini penting agar Intelephense mengenali tipe datanya.
-             *
-             * @var AuthLib $auth
-             */
-            $auth = new AuthLib();
-
-            // Jalankan middleware
-            $auth->check();
+        // Proteksi untuk halaman admin/member berbasis SESSION
+        if (strpos($uri, 'admin/') === 0 || strpos($uri, 'member/') === 0) {
+            if (!$CI->session->userdata('user_id')) {
+                redirect('login');
+                exit;
+            }
         }
     }
 }
