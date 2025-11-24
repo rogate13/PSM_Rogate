@@ -22,7 +22,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            /* FIX RESPONSIVE */
+            gap: 10px;
+            /* FIX RESPONSIVE */
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            /* FIX RESPONSIVE */
+            gap: 8px;
         }
 
         .nav-menu a {
@@ -31,9 +42,10 @@
             font-size: 14px;
             padding: 8px 15px;
             border-radius: 8px;
-            margin-left: 8px;
             background: rgba(255, 255, 255, 0.20);
             transition: 0.2s;
+            white-space: nowrap;
+            /* mencegah pecah */
         }
 
         .nav-menu a:hover {
@@ -48,6 +60,8 @@
 
         .container-card {
             max-width: 500px;
+            width: 90%;
+            /* FIX RESPONSIVE */
             margin: 40px auto;
             background: white;
             padding: 30px;
@@ -56,16 +70,10 @@
         }
 
         .btn-primary {
-            /* display: block; (Tetap dipertahankan untuk mengizinkan 'margin: auto') */
             display: block;
-
-            /* Ubah width menjadi lebih kecil */
             width: 80%;
-            /* Lebar tombol menjadi 80% dari kontainer */
-
-            /* Tambahkan 'margin: 15px auto 0 auto;' untuk memusatkannya */
+            /* SESUAI KEINGINAN */
             margin: 15px auto 0 auto;
-
             padding: 12px;
             background: #ff4b4b;
             color: white;
@@ -74,7 +82,6 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            /* margin-top: 15px; (Dihapus karena sudah ada di properti 'margin') */
             text-align: center;
             text-decoration: none;
         }
@@ -96,11 +103,9 @@
             margin-top: 20px;
         }
 
-        /* Styling untuk membuat tabel menjadi rapi dan mudah dibaca */
         .container-card table {
             width: 100%;
             border-collapse: collapse;
-            /* Menghilangkan spasi ganda antar border */
             margin-top: 20px;
             font-size: 14px;
         }
@@ -109,8 +114,6 @@
         .container-card td {
             border: 1px solid #e0e0e0;
             padding: 10px 8px;
-            text-align: left;
-            /* Default text-align untuk Tipe */
         }
 
         .container-card th {
@@ -120,33 +123,47 @@
             text-transform: uppercase;
         }
 
-        /* Penyesuaian lebar dan perataan kolom angka dan tanggal */
         .container-card td:nth-child(2),
-        /* Nominal */
         .container-card td:nth-child(3),
-        /* Sebelum */
         .container-card td:nth-child(4),
-        /* Sesudah */
-        .container-card td:nth-child(5)
-
-        /* Tanggal */
-            {
+        .container-card td:nth-child(5) {
             text-align: right;
-            /* Rata kanan untuk angka dan tanggal */
             white-space: nowrap;
-            /* Mencegah pemisahan baris pada tanggal/nominal */
         }
 
-        /* Warna latar belakang bergantian (zebra stripping) */
         .container-card tr:nth-child(even) {
             background-color: #fcfcfc;
         }
 
         .container-card tr:hover {
             background-color: #f0f8ff;
-            /* Warna saat hover */
+        }
+
+        /* ========================
+        RESPONSIVE MOBILE FIX
+       ======================== */
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 12px 15px;
+                font-size: 18px;
+            }
+
+            .nav-menu a {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            .container-card {
+                padding: 20px;
+            }
+
+            .btn-primary {
+                width: 90%;
+                /* biar lebih nyaman di HP */
+            }
         }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
