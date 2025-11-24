@@ -15,7 +15,7 @@ require_once __DIR__ . '/services/BalanceService.php';
  * @property RoleLib               $role
  * @property array                 $auth_user
  */
-class TransactionApi extends CI_Controller
+class TransactionApi extends MY_Controller
 {
     private $balanceService;
 

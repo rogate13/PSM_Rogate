@@ -8,9 +8,9 @@ $hook['post_controller_constructor'][] = [
     'filepath' => 'hooks'
 ];
 
-$hook['post_controller_constructor'][] = [
-    'class'    => 'RedirectLogin',
-    'function' => 'check',
-    'filename' => 'RedirectLogin.php',
-    'filepath' => 'hooks'
-];
+// $hook['post_controller_constructor'][] = [
+//     'class'    => 'RedirectLogin',
+//     'function' => 'check',
+//     'filename' => 'RedirectLogin.php',
+//     'filepath' => 'hooks'
+// ];

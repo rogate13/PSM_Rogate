@@ -6,18 +6,22 @@ class AuthHook
     public function run()
     {
         $CI =& get_instance();
-        $CI->load->library('session');      // ⬅️ WAJIB supaya $CI->session ada
+        $CI->load->library('session');
 
-        $uri = uri_string(); // "", "login", "api/members", "admin/dashboard"
+        $uri = uri_string();
 
-        // ROUTE YANG TIDAK BOLEH DIHADANG
+        // ====== API TIDAK BOLEH DISENTUH HOOK ======
+        if (strpos($uri, 'api/') === 0) {
+            return; // <-- LEWATI
+        }
+        // ============================================
+
+        // PUBLIC ROUTES (boleh diakses tanpa login)
         $public_routes = [
-            '',                     // default_controller
+            '',
             'login',
             'login/authenticate',
             'logout',
-            'register',
-            'assets',
         ];
 
         foreach ($public_routes as $pub) {
@@ -26,14 +30,7 @@ class AuthHook
             }
         }
 
-        // Proteksi hanya untuk API (JWT)
-        if (strpos($uri, 'api/') === 0) {
-            $CI->load->library('AuthLib', null, 'authlib');
-            $CI->authlib->check();
-            return;
-        }
-
-        // Proteksi untuk halaman admin/member berbasis SESSION
+        // Jika akses halaman admin/member tapi belum login → redirect
         if (strpos($uri, 'admin/') === 0 || strpos($uri, 'member/') === 0) {
             if (!$CI->session->userdata('user_id')) {
                 redirect('login');

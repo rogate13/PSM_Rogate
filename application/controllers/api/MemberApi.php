@@ -13,7 +13,7 @@ require_once __DIR__ . '/services/BalanceService.php';
  * @property Member_log_model $memberLog
  * @property RoleLib         $role
  */
-class MemberApi extends CI_Controller
+class MemberApi extends MY_Controller
 {
 
     public function __construct()

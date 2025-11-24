@@ -1,0 +1,2 @@
+INSERT INTO `members` (`id`, `member_code`, `full_name`, `email`, `phone`, `status`, `current_balance`, `created_at`, `updated_at`) VALUES (1, 'admin', 'admin', 'admin@admin.com', '081212121212', 'ACTIVE', 0, '2025-11-24 15:43:58', '2025-11-24 15:43:58');
+INSERT INTO `users` (`id`, `username`, `password_hash`, `full_name`, `role`, `member_id`, `created_at`, `updated_at`, `api_token`) VALUES (NULL, 'admin', '$2a$12$n4mLY6x68BzULdOdNKqVeO89BxRYTDggiyVPCFCCQhACZBLnoEI1W', 'admin', 'STAFF', '1', current_timestamp(), current_timestamp(), NULL);
