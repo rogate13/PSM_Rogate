@@ -46,6 +46,9 @@ class Login extends CI_Controller
             'member_id'  => $user['member_id'], // untuk MEMBER
         ]);
 
+        $this->session->set_flashdata('login_success', 'Login berhasil. Selamat datang!');
+
+
         if ($user['role'] === 'ADMIN' || $user['role'] === 'STAFF') {
             redirect('admin/members');
         }

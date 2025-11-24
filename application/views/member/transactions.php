@@ -10,13 +10,13 @@
     </tr>
 
     <?php foreach ($list as $t): ?>
-    <tr>
-        <td><?= $t['name'] ?></td>
-        <td><?= number_format($t['amount']) ?></td>
-        <td><?= number_format($t['balance_before']) ?></td>
-        <td><?= number_format($t['balance_after']) ?></td>
-        <td><?= $t['created_at'] ?></td>
-    </tr>
+        <tr>
+            <td><?= $t['type_name'] ?></td>
+            <td><?= number_format($t['amount']) ?></td>
+            <td><?= number_format($t['balance_before']) ?></td>
+            <td><?= number_format($t['balance_after']) ?></td>
+            <td><?= $t['created_at'] ?></td>
+        </tr>
     <?php endforeach; ?>
 </table>
 

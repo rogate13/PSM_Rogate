@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Member - PSM Wallet</title>
+    <title>Member - PSM Rogate</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
@@ -13,108 +14,164 @@
         }
 
         .topbar {
-            background: linear-gradient(135deg, #0077ff, #00c6ff);
-            padding: 15px 22px;
+            background: linear-gradient(135deg, #ff4b4b, #ff9800);
+            padding: 15px 25px;
             color: white;
             font-size: 20px;
             font-weight: bold;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .topbar a {
+        .nav-menu a {
             color: white;
             text-decoration: none;
-            background: rgba(255,255,255,0.25);
-            padding: 7px 14px;
-            border-radius: 10px;
+            font-size: 14px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin-left: 8px;
+            background: rgba(255, 255, 255, 0.20);
             transition: 0.2s;
-            font-size: 13px;
         }
 
-        .topbar a:hover {
-            background: rgba(255,255,255,0.4);
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .nav-menu a.active {
+            background: white !important;
+            color: #ff4b4b !important;
+            font-weight: bold;
         }
 
         .container-card {
-            max-width: 450px;
-            margin: 32px auto;
+            max-width: 500px;
+            margin: 40px auto;
             background: white;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-
-        input, button {
-            font-family: inherit;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
         .btn-primary {
-            width: 100%;
+            /* display: block; (Tetap dipertahankan untuk mengizinkan 'margin: auto') */
+            display: block;
+
+            /* Ubah width menjadi lebih kecil */
+            width: 80%;
+            /* Lebar tombol menjadi 80% dari kontainer */
+
+            /* Tambahkan 'margin: 15px auto 0 auto;' untuk memusatkannya */
+            margin: 15px auto 0 auto;
+
             padding: 12px;
-            background: #0077ff;
+            background: #ff4b4b;
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            margin-top: 15px;
+            /* margin-top: 15px; (Dihapus karena sudah ada di properti 'margin') */
+            text-align: center;
+            text-decoration: none;
         }
 
         .btn-primary:hover {
-            background: #005dc7;
+            background: #d83838;
         }
 
-        table {
-            width: 100%;
-            margin-top: 15px;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #eef3ff;
-            padding: 10px;
-            text-align: left;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover td {
-            background: #f7faff;
-        }
-
-        .alert-error {
-            background: #ffdddd;
-            padding: 10px;
-            border-left: 4px solid #ff4b4b;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            color: #b30000;
-            font-size: 14px;
+        .btn-orange {
+            background: #ff9800 !important;
         }
 
         .back-link {
-            display: inline-block;
-            margin-top: 15px;
+            color: #ff4b4b;
             text-decoration: none;
-            color: #0077ff;
             font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Styling untuk membuat tabel menjadi rapi dan mudah dibaca */
+        .container-card table {
+            width: 100%;
+            border-collapse: collapse;
+            /* Menghilangkan spasi ganda antar border */
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .container-card th,
+        .container-card td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            text-align: left;
+            /* Default text-align untuk Tipe */
+        }
+
+        .container-card th {
+            background-color: #f8f8f8;
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Penyesuaian lebar dan perataan kolom angka dan tanggal */
+        .container-card td:nth-child(2),
+        /* Nominal */
+        .container-card td:nth-child(3),
+        /* Sebelum */
+        .container-card td:nth-child(4),
+        /* Sesudah */
+        .container-card td:nth-child(5)
+
+        /* Tanggal */
+            {
+            text-align: right;
+            /* Rata kanan untuk angka dan tanggal */
+            white-space: nowrap;
+            /* Mencegah pemisahan baris pada tanggal/nominal */
+        }
+
+        /* Warna latar belakang bergantian (zebra stripping) */
+        .container-card tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .container-card tr:hover {
+            background-color: #f0f8ff;
+            /* Warna saat hover */
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
-<div class="topbar">
-    <span>PSM Wallet – Member</span>
-    <a href="<?= base_url('logout') ?>">Logout</a>
-</div>
+    <?php $uri = uri_string(); ?>
 
-<div class="container-card">
+    <div class="topbar">
+        <span>PSM Rogate — Member Area</span>
+
+        <div class="nav-menu">
+            <a href="<?= base_url('member/profile') ?>"
+                class="<?= (strpos($uri, 'member/profile') === 0) ? 'active' : '' ?>">Profil</a>
+
+            <a href="<?= base_url('member/topup') ?>"
+                class="<?= (strpos($uri, 'member/topup') === 0) ? 'active' : '' ?>">Topup</a>
+
+            <a href="<?= base_url('member/donate') ?>"
+                class="<?= (strpos($uri, 'member/donate') === 0) ? 'active' : '' ?>">Donasi</a>
+
+            <a href="<?= base_url('member/transactions') ?>"
+                class="<?= (strpos($uri, 'member/transactions') === 0) ? 'active' : '' ?>">Transaksi</a>
+
+            <a href="<?= base_url('logout') ?>">Logout</a>
+        </div>
+    </div>
+
+    <div class="container-card">
