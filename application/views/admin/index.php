@@ -17,7 +17,9 @@
         <td><?= $m['full_name'] ?></td>
         <td><?= $m['email'] ?></td>
         <td><?= number_format($m['current_balance']) ?></td>
-        <td><a href="<?= base_url('admin/members/'.$m['id']) ?>">Detail</a></td>
+        <td>
+            <a class="btn-small" href="<?= base_url('admin/members/'.$m['id']) ?>">Detail</a>
+        </td>
     </tr>
     <?php endforeach; ?>
 </table>

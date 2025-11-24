@@ -1,16 +1,14 @@
 <h2>Topup Saldo</h2>
 
 <?php if (!empty($error)): ?>
-    <div style="color:red;"><?= $error ?></div>
+    <div class="alert-error"><?= $error ?></div>
 <?php endif; ?>
 
 <form method="POST" action="<?= base_url('member/topup/submit') ?>">
     <label>Nominal Topup</label>
-    <input type="number" name="amount" min="1" required>
+    <input type="number" name="amount" min="1" required style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;">
 
-    <br><br>
-    <button type="submit">Topup</button>
+    <button type="submit" class="btn-primary">Topup</button>
 </form>
 
-<br>
-<a href="<?= base_url('member/profile') ?>">&larr; Kembali</a>
+<a href="<?= base_url('member/profile') ?>" class="back-link">&larr; Kembali</a>

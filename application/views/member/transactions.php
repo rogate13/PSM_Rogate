@@ -19,3 +19,5 @@
     </tr>
     <?php endforeach; ?>
 </table>
+
+<a href="<?= base_url('member/profile') ?>" class="back-link">&larr; Kembali</a>

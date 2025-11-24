@@ -5,4 +5,5 @@
 <p><b>Email:</b> <?= $member['email'] ?></p>
 <p><b>Saldo:</b> <?= number_format($member['current_balance']) ?></p>
 
-<a href="<?= base_url('admin/members') ?>">&larr; Kembali</a>
+<br>
+<a href="<?= base_url('admin/members') ?>" class="btn-small">&larr; Kembali</a>

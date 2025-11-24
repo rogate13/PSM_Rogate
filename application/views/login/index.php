@@ -1,18 +1,25 @@
-<div class="login-box">
+<div class="login-container">
 
-    <h2 style="text-align:center;">LOGIN</h2>
+    <div class="login-card">
+        <div class="brand-area">
+            <img src="<?= base_url('img/wallet.png') ?>" class="brand-icon" alt="Wallet Icon">
+            <h2 class="brand-title">PSM Wallet</h2>
+            <p class="brand-subtitle">Secure Member Balance System</p>
+        </div>
 
-    <?php if (!empty($error)): ?>
-        <div class="error"><?= $error ?></div>
-    <?php endif; ?>
+        <?php if (!empty($error)) : ?>
+            <div class="alert-error"><?= $error ?></div>
+        <?php endif; ?>
 
-    <form method="POST" action="<?= base_url('login/authenticate') ?>">
-        <label>Username</label>
-        <input type="text" name="username" required>
+        <form action="<?= site_url('login/authenticate') ?>" method="POST">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter username..." required>
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password..." required>
 
-        <button type="submit">Masuk</button>
-    </form>
+            <button type="submit" class="btn-login">MASUK</button>
+        </form>
+    </div>
+
 </div>
