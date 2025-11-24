@@ -15,7 +15,7 @@ class AdminView extends CI_Controller
         $data['members'] = $this->members->getAll();
 
         $this->load->view('admin/layouts/header');
-        $this->load->view('admin/members/index', $data);
+        $this->load->view('admin/index', $data);
         $this->load->view('admin/layouts/footer');
     }
 
