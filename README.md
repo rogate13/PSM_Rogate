@@ -1,7 +1,7 @@
 # 📘 PSM_Rogate
 
 ## 1. Tentang Project
-PSM Wallet adalah aplikasi:
+PSM Rogate adalah aplikasi:
 - Topup saldo member
 - Deduct saldo (donasi)
 - Manajemen transaksi
