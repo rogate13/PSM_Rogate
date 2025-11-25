@@ -1,4 +1,4 @@
-# 📘 PSM Wallet (PSM_Rogate)
+# 📘 PSM_Rogate
 
 ## 1. Tentang Project
 PSM Wallet adalah aplikasi:
@@ -351,6 +351,4 @@ http://localhost/PSM_Rogate/login
 
 ---
 
-# 13. Kontak Pengembang
-Jika project dikembangkan oleh tim, dokumentasi ini sudah siap dipakai di GitHub, GitLab, maupun onboarding developer.
 
