@@ -25,23 +25,9 @@ htdocs/PSM_Rogate/
 ## 4. Instalasi
 1. Copy project ke `htdocs`
 2. Import database:
-   - 01. awal_awal.sql
-   - 02. tambahan tabel.sql
-   - 03. tokenisasi.sql
+   - psm_rogate.sql
 
-## 5. Konfigurasi CI
-Autoload:
-```
-$autoload['libraries'] = ['database','session'];
-$autoload['helper'] = ['url','form'];
-```
-
-base_url:
-```
-$config['base_url']=((isset($_SERVER['HTTPS'])...
-```
-
-## 6. Login System
+## 5. Login System
 Controller:
 ```
 controllers/Login.php
@@ -53,7 +39,7 @@ Session disimpan:
 - role
 - member_id
 
-## 7. Hooks
+## 6. Hooks
 - AuthHook (API token)
 - RedirectLogin (Session redirect)
 
@@ -62,10 +48,7 @@ Enable:
 $config['enable_hooks'] = TRUE;
 ```
 
-## 8. Routes
-API dan View routing sudah lengkap sesuai project.
-
-## 9. Testing API
+## 7. Testing API
 # 1. DESKRIPSI API
 Seluruh API menggunakan pola **RESTful**, berbasis **JSON**, dan menggunakan **Bearer Token Authentication**.
 
@@ -233,69 +216,7 @@ Setiap transaksi menghasilkan:
 
 ---
 
-# 7. MongoDB Logging (Opsional)
-
-MongoDB dipakai untuk:
-- Riwayat API
-- Error log
-- Mutasi saldo versi NoSQL
-- Audit trail operasi cepat
-
-### File Library
-```
-application/libraries/MongoLog.php
-```
-
-### Cara Pakai di BalanceService
-```php
-$this->CI->mongolog->insert('transaction_logs', [
-    'member_id' => $member_id,
-    'action' => 'TOPUP',
-    'amount' => $amount,
-    'timestamp' => date('c')
-]);
-```
-
----
-
-# 8. Struktur MongoDB Collections
-
-## 8.1 Collection: `api_logs`
-```json
-{
-  "method": "POST",
-  "endpoint": "/api/members/1/topup",
-  "request_body": { "amount": 50000 },
-  "response_code": 200,
-  "user_id": 1,
-  "timestamp": "2025-11-21T12:22:33Z"
-}
-```
-
-## 8.2 Collection: `transaction_logs`
-```json
-{
-  "member_id": 1,
-  "type": "TOPUP",
-  "amount": 50000,
-  "before": 100000,
-  "after": 150000,
-  "timestamp": "2025-11-21T12:22:33Z"
-}
-```
-
-## 8.3 Collection: `error_logs`
-```json
-{
-  "error": "Insufficient balance",
-  "member_id": 1,
-  "timestamp": "2025-11-21T12:22:33Z"
-}
-```
-
----
-
-# 9. Authentication & Token Flow
+# 7. Authentication & Token Flow
 
 1. Login → Generate Token  
 2. Token disimpan di database  
@@ -310,7 +231,7 @@ Authorization: Bearer <token>
 
 ---
 
-# 10. Complete API List
+# 8. Complete API List
 
 | Endpoint | Method | Role | Fungsi |
 |----------|--------|-------|--------|
@@ -328,7 +249,7 @@ Authorization: Bearer <token>
 
 ---
 
-# 11. Security Notes
+# 9. Security Notes
 
 ✔ Token hanya valid 1 jam  
 ✔ Semua perubahan saldo otomatis tercatat (MySQL + MongoDB)  
@@ -337,7 +258,7 @@ Authorization: Bearer <token>
 
 ---
 
-# 12. Cara Menjalankan
+# 10. Cara Menjalankan
 1. Jalankan Apache + MySQL  
 2. Import SQL  
 3. Pastikan `enable_hooks` aktif  
